@@ -4,7 +4,6 @@
   "description": "HypeGuardian's homepage",
   "main": "docs/index.html",
   "scripts": {
-    "postinstall": "npm run compile",
     "start": "NODE_ENV=development webpack serve --host 0.0.0.0 --content-base app --history-api-fallback",
     "compile": "NODE_ENV=production webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -12,8 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@material-ui/core": "^4.11.3",
-    "@material-ui/icons": "^4.11.2",
+    "@emotion/react": "^11.7.0",
+    "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.3.1",
+    "@mui/material": "^5.2.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",

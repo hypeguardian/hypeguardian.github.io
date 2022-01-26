@@ -11,9 +11,9 @@ const ScreenContext = React.createContext([
 
 const trackScreenType = () => {
   const width = window.innerWidth
-  const type:ScreenType = width >= 1920? 'xl-desktop'
-    : width >= 1280? 'lg-desktop'
-    : width >= 960? 'md-desktop'
+  const type:ScreenType = width >= 1440? 'xl-desktop'
+    : width >= 1240? 'lg-desktop'
+    : width >= 905? 'md-desktop'
     : width >= 600? 'sm-tablet'
     : 'xs-phone'
   return type

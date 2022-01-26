@@ -1,70 +1,107 @@
 import * as React from 'react'
-import {makeStyles} from '@material-ui/styles'
-import {Theme} from '@material-ui/core/styles'
-import Grid from '@material-ui/core/Grid'
-import Typography from '@material-ui/core/Typography'
+import {Theme, SxProps} from '@mui/material'
+import Box from '@mui/material/Box'
+import Typography from '@mui/material/Typography'
 
-import HypeGuardianLogo from '../../../asset/img/hypeguardian-logo.svg'
-import {useScreenState} from '../../store/screen'
+import {useScreenState, ScreenType} from '../../store/screen'
+import HeroSection from './hero'
+import ServicesSection from './services'
+import PartnersSection from './partners'
+import FooterSection from './footer'
 
-const useStyles = makeStyles((theme:Theme) => ({
-  container: {
-    width: '100vw',
-    minHeight: '100vh',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  body: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  pageContainer: {
-    width: '1200px',
+export const useStyles = (screenType:ScreenType) => ({
+  row: {
+    position: 'relative',
     maxWidth: '100%',
-    minHeight: '100vh',
-    padding: '32px',
-    [`@media (max-width:${theme.breakpoints.values.sm}px)`]: {
-      padding: '24px',
-    }
+    padding: [
+      screenType === 'xs-phone'
+        ? '32px'
+        : screenType === 'sm-tablet' ||
+          screenType === 'md-desktop'
+        ? '48px'
+        : '64px',
+      '0'
+    ].join(' ')
   },
-  pageContainerPadding: {
-    padding: '32px',
-    [`@media (max-width:${theme.breakpoints.values.sm}px)`]: {
-      padding: '24px',
-    }
-  },
-  headerContent: {
-    flex: 1,
-    gap: '24px'
-  },
-  hypeguardianLogo: {
-    width: '160px'
-  },
-  separator: {
-    height: '240px',
-    width: '2px',
-    backgroundColor: 'rgb(60, 176, 228)',
-    margin: '0 16px'
+  content: {
+    position: 'relative',
+    maxWidth: '100%',
+    width: screenType === 'xs-phone' ||
+      screenType === 'sm-tablet' ||
+      screenType === 'md-desktop'
+      ? '840px'
+      : '1040px',
+    padding: [
+      screenType === 'xs-phone'
+        ? '24px'
+        : screenType === 'sm-tablet' ||
+          screenType === 'md-desktop'
+        ? '48px'
+        : '64px',
+      screenType === 'xs-phone'
+        ? '16px'
+        : screenType === 'sm-tablet' ||
+          screenType === 'md-desktop'
+        ? '32px'
+        : '48px'
+    ].join(' ')
   }
-}))
+}) as Record<'row' | 'content', SxProps<Theme>>
 const LandingPage:React.FunctionComponent = () => {
   const [{type:screenType}] = useScreenState()
-  const classes = useStyles({})
-  const mobile = screenType === 'xs-phone'
+
+  const styles = useStyles(screenType)
   return (
-    <div className={classes.container}>
-      <Grid container direction='column' alignItems='center' classes={{container:classes.pageContainer}}>
-        <Grid container direction={mobile? 'column':'row'} justify='center' alignItems='center' classes={{container:classes.headerContent}}>
-          <img className={classes.hypeguardianLogo} src={HypeGuardianLogo}/>
-          {!mobile && <div className={classes.separator}/>}
-          <Typography variant='h3' align={mobile? 'center':'left'}>WORK IN<br/>PROGRESS</Typography>
-        </Grid>
-      </Grid>
-    </div>
+    <Box sx={{
+      position: 'relative',
+      width: '100vw',
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'start',
+      alignItems: 'center',
+      backgroundColor: 'rgb(225, 232, 236)'
+    }}>
+      <HeroSection/>
+      <Box sx={styles.row}>
+        <Box sx={styles.content}>
+          <Typography
+            variant={screenType === 'xs-phone'? 'h3':'h1'}
+            sx={{
+              fontFamily: 'Bebas Neue',
+              fontWeight: 400,
+              lineHeight: 1,
+              marginBottom: screenType === 'xs-phone'? '4px':'6px'
+            }}
+          >
+            WE'RE HYPEGUARDIAN
+          </Typography>
+          <Typography
+            variant={screenType === 'xs-phone'? 'h6':'h5'}
+            sx={{
+              fontFamily: 'Titillium Web',
+              fontWeight: 700,
+              marginBottom: screenType === 'xs-phone'? '12px':'16px'
+            }}
+          >
+            #DEFYTHENORM
+          </Typography>
+          <Typography
+            variant={screenType === 'xs-phone'? 'body1':'h6'}
+            sx={{
+              fontFamily: 'Titillium Web',
+              color: 'rgb(118, 121, 128)'
+            }}
+          >
+            We believe life is too short to wear dirty or shitty shoes.
+            You can put yourself in someone else's shoes, but don't let someone else decide what shoes you should wear.
+          </Typography>
+        </Box>
+      </Box>
+      <ServicesSection/>
+      <PartnersSection/>
+      <FooterSection/>
+    </Box>
   )
 }
 

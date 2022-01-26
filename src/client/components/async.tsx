@@ -1,13 +1,6 @@
 import * as React from 'react'
-import {makeStyles} from '@material-ui/styles'
-import {Theme} from '@material-ui/core/styles'
+import Box from '@mui/material/Box'
 
-const useStyles = makeStyles((theme:Theme) => ({
-  container: {
-    position: 'relative',
-    width: '100%'
-  }
-}))
 const Async:React.FunctionComponent<AsyncProps<any>> = (props) => {
   const {props:childProps} = props
   const [state, setState] = React.useState<AsyncState>({})
@@ -16,14 +9,16 @@ const Async:React.FunctionComponent<AsyncProps<any>> = (props) => {
   }, [])
 
   const {Component} = state
-  const classes = useStyles({})
   return (
-    <div className={classes.container}>
+    <Box sx={{
+      position: 'relative',
+      width: '100%'
+    }}>
       {Component
         ? <Component {...childProps}/>
         : null
       }
-    </div>
+    </Box>
   )
 }
 type AsyncProps<T> = {

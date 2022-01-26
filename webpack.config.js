@@ -25,7 +25,7 @@ module.exports = {
 		publicPath: '/'
   },
   resolve: {
-    extensions: ['.js', '.ts', '.tsx', '.jpg', '.jpeg', '.png', '.gif', '.svg', '.mov', '.ttf', '.eot', '.woff', '.woff2']
+    extensions: ['.js', '.ts', '.tsx', '.jpg', '.jpeg', '.png', '.gif', '.svg', '.mov', '.mp4', '.ttf', '.eot', '.woff', '.woff2']
   },
   module: {
     rules: [{
@@ -34,7 +34,7 @@ module.exports = {
         loader: 'ts-loader'
       }]
     }, {
-      test: /\.(jpe?g|png|gif|svg|mov|ttf|eot|woff2?)$/,
+      test: /\.(jpe?g|png|gif|svg|mov|mp4|ttf|eot|woff2?)$/,
       use: [{
         loader: 'file-loader',
         options: {
