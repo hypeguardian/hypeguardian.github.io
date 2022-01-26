@@ -12,7 +12,7 @@ const HeroSection:React.FunctionComponent = () => {
   const [{type:screenType}] = useScreenState()
   const [state, setState] = React.useState<HeroSectionState>({
     heroSource: new MediaSource(),
-    playState: 'stopped'
+    playState: 'loading'
   })
   const videoRef = React.useRef<HTMLVideoElement>()
 
@@ -20,7 +20,7 @@ const HeroSection:React.FunctionComponent = () => {
     const {heroSource} = state
     videoRef.current.src = URL.createObjectURL(heroSource)
     await new Promise(resolve => heroSource.addEventListener('sourceopen', resolve))
-    const videoBuffer = heroSource.addSourceBuffer('video/mp4; codecs="avc1.64000d"')
+    const videoBuffer = heroSource.addSourceBuffer('video/mp4; codecs="avc1.640028"')
     const response = await fetch(HypeGuardianVideo)
     const buffers = await response.arrayBuffer()
     videoBuffer.appendBuffer(buffers)
@@ -69,12 +69,12 @@ const HeroSection:React.FunctionComponent = () => {
   const {playState} = state
   return (
     <Box
-      onClick={pauseResumeVideo}
+      onClick={playState !== 'loading'? pauseResumeVideo:undefined}
       sx={{
         position: 'relative',
         width: '100vw',
         height: screenType === 'xs-phone'? '480px':'640px',
-        cursor: 'pointer'
+        cursor: playState !== 'loading'? 'pointer':'default'
       }}
     >
       <video
@@ -89,14 +89,18 @@ const HeroSection:React.FunctionComponent = () => {
           objectFit: 'cover',
         }}
       />
-      {[{
-        state: 'paused',
-        background: 'rgba(60, 177, 229, 0.3)',
-        icon: PauseIcon
+      {[, {
+        state: 'loading',
+        background: 'rgba(60, 177, 229, 1)',
+        icon: undefined
       }, {
         state: 'stopped',
         background: 'rgba(60, 177, 229, 1)',
         icon: PlayIcon
+      }, {
+        state: 'paused',
+        background: 'rgba(60, 177, 229, 0.3)',
+        icon: PauseIcon
       }].map(screen => (
         <Fade
           key={screen.state}
@@ -125,12 +129,16 @@ const HeroSection:React.FunctionComponent = () => {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              border: '3px solid rgba(0, 0, 0, 0.87)',
+              border: screen.icon
+                ? '3px solid rgba(0, 0, 0, 0.87)'
+                : 'none',
               borderRadius: '32px'
             }}>
-              <screen.icon sx={{
-                fontSize: '32px'
-              }}/>
+              {screen.icon? (
+                <screen.icon sx={{
+                  fontSize: '32px'
+                }}/>
+              ):undefined}
             </Box>
           </Box>
         </Fade>
@@ -140,7 +148,7 @@ const HeroSection:React.FunctionComponent = () => {
 }
 type HeroSectionState = {
   heroSource: MediaSource
-  playState: 'playing' | 'paused' | 'stopped'
+  playState: 'loading' | 'playing' | 'paused' | 'stopped'
 }
 
 export default HeroSection
