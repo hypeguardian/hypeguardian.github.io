@@ -11,28 +11,34 @@ import {useScreenState} from '../../store/screen'
 const HeroSection:React.FunctionComponent = () => {
   const [{type:screenType}] = useScreenState()
   const [state, setState] = React.useState<HeroSectionState>({
-    heroSource: new MediaSource(),
+    heroSource: typeof MediaSource !== 'undefined'
+      ? new MediaSource()
+      : undefined,
     playState: 'loading'
   })
   const videoRef = React.useRef<HTMLVideoElement>()
 
   const downloadVideo = async() => {
     const {heroSource} = state
-    videoRef.current.src = URL.createObjectURL(heroSource)
-    await new Promise(resolve => heroSource.addEventListener('sourceopen', resolve))
-    const videoBuffer = heroSource.addSourceBuffer('video/mp4; codecs="avc1.640028"')
-    const response = await fetch(HypeGuardianVideo)
-    const buffers = await response.arrayBuffer()
-    videoBuffer.appendBuffer(buffers)
-    await new Promise(resolve => videoBuffer.addEventListener('updateend', resolve))
-    heroSource.endOfStream()
+    if(heroSource) {
+      videoRef.current.src = URL.createObjectURL(heroSource)
+      await new Promise(resolve => heroSource.addEventListener('sourceopen', resolve))
+      const videoBuffer = heroSource.addSourceBuffer('video/mp4; codecs="avc1.640028"')
+      const response = await fetch(HypeGuardianVideo)
+      const buffers = await response.arrayBuffer()
+      videoBuffer.appendBuffer(buffers)
+      await new Promise(resolve => videoBuffer.addEventListener('updateend', resolve))
+      heroSource.endOfStream()
+    }
   }
   React.useEffect(() => {
     const startVideo = async() => {
       await downloadVideo()
       setState(state => ({
         ...state,
-        playState: 'playing'
+        playState: state.heroSource
+          ? 'playing'
+          : 'loading'
       }))
     }
     document.body.style.backgroundColor = 'rgb(17, 17, 17)'
@@ -147,7 +153,7 @@ const HeroSection:React.FunctionComponent = () => {
   )
 }
 type HeroSectionState = {
-  heroSource: MediaSource
+  heroSource?: MediaSource
   playState: 'loading' | 'playing' | 'paused' | 'stopped'
 }
 
