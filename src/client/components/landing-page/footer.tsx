@@ -30,9 +30,11 @@ const FooterSection:React.FunctionComponent = () => {
       }}>
         {[{
           icon: FacebookIcon,
+          alt: 'Facebook',
           link: 'https://www.facebook.com/hypeguardianmy'
         }, {
           icon: InstagramIcon,
+          alt: 'Instagram',
           link: 'https://www.instagram.com/hypeguardianmy'
         }].map(media => (
           <a
@@ -50,6 +52,7 @@ const FooterSection:React.FunctionComponent = () => {
           >
             <img
               src={media.icon}
+              alt={media.alt}
               style={{
                 width: '16px',
                 height: '16px',
@@ -72,6 +75,7 @@ const FooterSection:React.FunctionComponent = () => {
       }}>
         <img
           src={HypeGuardianLogo}
+          alt='HypeGuardian'
           style={{
             width: '120px',
             opacity: 0.5,
