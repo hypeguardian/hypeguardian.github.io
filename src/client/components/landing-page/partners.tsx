@@ -86,7 +86,9 @@ const ImageTransition:React.FunctionComponent<ImageTransitionProps> = ({
             top: state === 'entered' || state === 'entering'
               ? '0'
               : '100%',
-            background: `url(${sources[1]}) center/contain no-repeat`
+            background: sources[1]
+              ? `url(${sources[1]}) center/contain no-repeat`
+              : undefined
           }}/>
         )}
       </Transition>
