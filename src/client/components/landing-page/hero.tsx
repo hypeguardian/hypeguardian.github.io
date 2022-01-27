@@ -11,9 +11,13 @@ import {useScreenState} from '../../store/screen'
 const HeroSection:React.FunctionComponent = () => {
   const [{type:screenType}] = useScreenState()
   const [state, setState] = React.useState<HeroSectionState>({
-    heroSource: typeof MediaSource !== 'undefined'
-      ? new MediaSource()
-      : undefined,
+    heroSource: (() => {
+      try {
+        return new MediaSource()
+      } catch {
+        return undefined
+      }
+    })(),
     playState: 'loading'
   })
   const videoRef = React.useRef<HTMLVideoElement>()
